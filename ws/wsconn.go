@@ -92,7 +92,7 @@ func (c *client) Connect() error {
 func (c *client) ForthwithSend(payload []byte) (err error) {
 	defer func() {
 		if panicErr := recover(); panicErr != nil {
-			err = panicErr.(error)
+			err = fmt.Errorf("写异常: %v", panicErr)
 		}
 	}()
 	c.sendChan <- payload
@@ -103,7 +103,7 @@ func (c *client) ForthwithSend(payload []byte) (err error) {
 func (c *client) LaterSend(payload []byte) (err error) {
 	defer func() {
 		if panicErr := recover(); panicErr != nil {
-			err = panicErr.(error)
+			err = fmt.Errorf("写异常: %v", panicErr)
 		}
 	}()
 	c.secondSendChan <- payload
@@ -189,7 +189,7 @@ var closeErrorCode = []int{
 }
 
 // 实际执行开始的函数
-func (c *client) init() (err error) {
+func (c *client) init() error {
 	c.ctx, c.cancel = context.WithCancel(context.Background())
 	c.sendChan = make(chan []byte, 100)
 	c.secondSendChan = make(chan []byte, 100)
@@ -199,7 +199,7 @@ func (c *client) init() (err error) {
 		go c.readWs()
 	}
 	c.openFn()
-	return
+	return nil
 }
 
 // 实际执行结束的函数

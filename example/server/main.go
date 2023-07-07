@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"time"
 	"ws/ws"
 )
 
@@ -16,8 +15,6 @@ func main() {
 
 		c.OnOpen(func() {
 			fmt.Println("ws 客户端已链接")
-			time.Sleep(time.Second * 5)
-			c.Close()
 		})
 		//ws收到消息的时候在这里显示
 		c.OnMessage(func(bytes []byte) {
