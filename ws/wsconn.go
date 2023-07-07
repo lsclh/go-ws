@@ -242,7 +242,6 @@ func (c *client) writeWs() {
 			}
 			c.write(secondData)
 		case <-c.ctx.Done():
-			c.isClose = true
 		}
 		if c.isClose {
 			break

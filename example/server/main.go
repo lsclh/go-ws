@@ -23,7 +23,7 @@ func main() {
 		c.OnMessage(func(bytes []byte) {
 			fmt.Println("ws 接受到消息: " + string(bytes))
 			if string(bytes) == "hw" {
-				c.ForthwithSend("你好世界")
+				c.ForthwithSend([]byte("你好世界"))
 			}
 		})
 		//ws关闭的时候在这里显示

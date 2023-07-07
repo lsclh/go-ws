@@ -20,7 +20,7 @@ func main() {
 	c.OnOpen(func() {
 		fmt.Println("ws 连接成功")
 		//发送信息 支持 string []byte{}
-		_ = c.ForthwithSend(`你好世界`)
+		_ = c.ForthwithSend([]byte(`你好世界`))
 	})
 	//ws收到消息的时候在这里显示
 	c.OnMessage(func(bytes []byte) {
@@ -35,7 +35,7 @@ func main() {
 	c.OnError(func(err error) {
 		fmt.Println("ws 出现错误: " + err.Error())
 	})
-	c.ForthwithSend("hw")
+	c.ForthwithSend([]byte("hw"))
 	//执行连接操作
 	if err := c.Connect(); err != nil {
 		fmt.Println("ws 连接失败", err.Error())
