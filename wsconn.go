@@ -1,4 +1,4 @@
-package ws
+package go_ws
 
 import (
 	"context"
