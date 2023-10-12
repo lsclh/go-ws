@@ -1,36 +1,39 @@
-package main
+package example
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
+	"testing"
 	"time"
 	"ws/ws"
 )
 
-func main() {
-
+func TestClient(t *testing.T) {
 	//使用方式
 	//先获取client实例
+	h := http.Header{}
+	h.Add("token", "123")
 	c := ws.NewWebsocket(
-		ws.WithClientWsUrl(&url.URL{Scheme: "ws", Host: "127.0.0.1:9501", Path: "ws"}),
+		ws.WithClientWsUrl(&url.URL{Scheme: "ws", Host: "127.0.0.1:9501", Path: "ws", RawQuery: "id=1"}, h),
 	)
 	//按照需要设置好监听的闭包函数
 	//ws连接成功的时候在这里显示
-	c.OnOpen(func() {
+	c.OnOpen(func(ctx *ws.Context) {
 		fmt.Println("ws 连接成功")
 		//发送信息 支持 string []byte{}
-		_ = c.ForthwithSend([]byte(`你好世界`))
+		_ = ctx.ForthwithSend([]byte(`你好世界`))
 	})
 	//ws收到消息的时候在这里显示
-	c.OnMessage(func(bytes []byte) {
+	c.OnMessage(func(ctx *ws.Context, bytes []byte) {
 		fmt.Println("ws 接受到消息: " + string(bytes))
 	})
 	//ws关闭的时候在这里显示
-	c.OnClose(func() {
+	c.OnClose(func(ctx *ws.Context) {
 		fmt.Println("ws 已断开")
 	})
 	//连接过程中 读取 写入 等操作出现错误或异常在这里显示
-	c.OnError(func(err error) {
+	c.OnError(func(ctx *ws.Context, err error) {
 		fmt.Println("ws 出现错误: " + err.Error())
 	})
 
