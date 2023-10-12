@@ -387,7 +387,6 @@ func (c *client) close() {
 		c.isClose = true
 		return
 	}
-	c.ctx.conn = nil
 	c.isClose = true
 	c.cancel()
 	c.closeFn()
